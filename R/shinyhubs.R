@@ -1,18 +1,3 @@
-write_session_info <- function() {
-    rmd <- tempfile(fileext=".Rmd")
-    writeLines(
-        text = "#' ---
-            #' output:
-            #'   reprex::reprex_document:
-            #'     venue: 'html'
-            #'     session_info: TRUE
-            #' ---
-            packageVersion('shinyhubs')
-            ", con = rmd
-    )
-    rmd
-}
-
 #' Initialize the shiny application for Bioconductor Hub resources
 #'
 #' The shiny app will allow the user to view a table of either `AnnotationHub`
@@ -72,8 +57,13 @@ shinyhubs <- function(...) {
                       "<br>",
                       "Source: ",
                       "<a href='https://github.com/LiNk-NY/shinyhubs' class='fa fa-github'></a>",
-                      "<br>",
-                      verbatimTextOutput("sessionInfo")
+                      "<br>", "<hr>",
+                      "<details style='margin-bottom:10px;'>", "<summary>",
+                      "Session Info",
+                      "</summary>",
+                      "<pre class='r'><code>sessioninfo::session_info()",
+                      verbatimTextOutput("sessioninfo"),
+                      "</code></pre></details>"
                     ))
                   })  # end about panel
                 )
@@ -94,7 +84,7 @@ shinyhubs <- function(...) {
             } else if (identical(input$hub, "ExperimentHub")) {
                 hub <<- ExperimentHub::ExperimentHub()
             }
-            md <- mcols(hub)
+            md <- S4Vectors::mcols(hub)
             ans <- as.data.frame(md)
             ans <- as.data.frame(
                 append(as.list(ans), list(HUBID = rownames(ans)), 0L),
@@ -120,7 +110,9 @@ shinyhubs <- function(...) {
                 shinytoastr::toastr_info(
                     "preparing *Hub data...", timeOut=4500
                 )
-                on.exit({shinytoastr::toastr_info("done.", timeOut=2500)})
+                on.exit({
+                    shinytoastr::toastr_info("done.", timeOut=2500)
+                })
                 biochub <<- hub_obj()
             },
             server = TRUE,
@@ -141,9 +133,9 @@ shinyhubs <- function(...) {
             )
         })
 
-        output$sessionInfo <- renderPrint(
-            capture.output(sessionInfo())
-        )
+        output$sessioninfo <- renderPrint({
+            capture.output(sessioninfo::session_info())
+        })
     }
     shinyApp(ui, server, ...)
 }
