@@ -1,0 +1,25 @@
+Package: shinyhubs
+Type: Package
+Title: View AnnotationHub and ExperimentHub Resources Interactively
+Version: 0.99.0
+Authors@R: c( 
+    person("Marcel", "Ramos", "M.", "marcel.ramosperez@roswellpark.org",
+      c("aut", "cre"), c(ORCID = "0000-0002-3242-0582")
+    ),
+    person("Vincent", "Carey", "J.", "stvjc@channing.harvard.edu", "ctb")
+  )
+Description: It uses DT or DataTable to display the AnnotationHub and
+  ExperimentHub resources.
+License: Artistic-2.0
+Encoding: UTF-8
+Depends: R (>= 4.1.0), shiny, AnnotationHub, ExperimentHub
+Imports:
+    DT,
+    shinyjs,
+    shinytoastr
+Encoding: UTF-8
+BugReports: https://github.com/LiNk-NY/shinyhubs/issues
+URL: https://github.com/LiNk-NY/shinyhubs
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
