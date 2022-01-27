@@ -7,7 +7,7 @@ write_session_info <- function() {
             #'     venue: 'html'
             #'     session_info: TRUE
             #' ---
-            packageVersion('AnnotationHubShiny')
+            packageVersion('shinyhubs')
             ", con = rmd
     )
     rmd
@@ -34,17 +34,14 @@ shinyhubs <- function(...) {
         shinytoastr::useToastr(),
 # https://stackoverflow.com/questions/53616176/shiny-use-validate-inside-downloadhandler
         shinyjs::useShinyjs(),
-        titlePanel(windowTitle = "AnnotationHubShiny"),
         fluidRow(
-            column(8, "Bioconductor *Hub Resources"),
-            helpText("The online shop for AnnotationHub and ExperimentHub Data"),
+            column(8, titlePanel("Bioconductor *Hub Resources"),
+            helpText("The online shop for AnnotationHub and ExperimentHub Data")),
             column(4, br(),
-                div(
-                    style = "margin-right:10px",
-                    img(
-                        src = "images/bioconductor_logo_rgb_small.png",
-                        align = "right"
-                    )
+                img(
+                    src = "images/bioconductor_logo_rgb_small.png",
+                    align = "right",
+                    style = "margin-right:10px"
                 )
             )
         ),
@@ -58,17 +55,15 @@ shinyhubs <- function(...) {
                         choices = c("AnnotationHub", "ExperimentHub")
                     )
                 )
-            )
-        ),
-        fluidRow(
+            ),
             column(9,
                 tabsetPanel(
                     tabPanel(
                         title = "Bioconductor Hub",
-                        h3 = textOutput("hubtitle"),
+                        h3(textOutput("hubtitle")),
                         { DT::dataTableOutput('tbl') }
                     ),
-                    tabPanel("About", {
+                    tabPanel(title = "About", {
                     HTML(paste0(
                       "<b>shinyhubs</b> version: ",
                       packageVersion("shinyhubs"),
@@ -78,13 +73,13 @@ shinyhubs <- function(...) {
                       "Source: ",
                       "<a href='https://github.com/LiNk-NY/shinyhubs' class='fa fa-github'></a>",
                       "<br>",
-                      markdown::markdownToHTML(rmarkdown::render(write_session_info(), "md_document", quiet = TRUE), fragment.only = TRUE)
+                      verbatimTextOutput("sessionInfo")
                     ))
                   })  # end about panel
                 )
             )
-        )
-    ) # end fluidpage
+        ) # end fluidRow
+    ) # end fluidPage
     ## from interactiveDisplayBase:::.dataFrame3
     server <- function(input, output, session) {
 
@@ -134,18 +129,21 @@ shinyhubs <- function(...) {
         )
 
         # render title text
-        output$hubtitle = renderText({
+        output$hubtitle <- renderText({
             nrec <- nrow(biochub)
-            nspec <- length(unique(hub_obj[["species"]]))
+            nspec <- length(unique(biochub[["species"]]))
             sprintf(
                 paste(
                     "Search through %d", input$hub,
-                    "resources from %d distinct species in Bioconductor",
+                    "resources from %d distinct species in Bioconductor"
                 ),
                 nrec, nspec
             )
         })
 
+        output$sessionInfo <- renderPrint(
+            capture.output(sessionInfo())
+        )
     }
     shinyApp(ui, server, ...)
 }
