@@ -15,9 +15,9 @@ Encoding: UTF-8
 Depends: R (>= 4.1.0), shiny, AnnotationHub, ExperimentHub
 Imports:
     DT,
+    S4Vectors,
     shinyjs,
     shinytoastr
-Encoding: UTF-8
 BugReports: https://github.com/LiNk-NY/shinyhubs/issues
 URL: https://github.com/LiNk-NY/shinyhubs
 LazyData: true
