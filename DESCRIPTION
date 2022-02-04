@@ -18,6 +18,8 @@ Imports:
     S4Vectors,
     shinyjs,
     shinytoastr
+Suggests:
+    sessioninfo
 BugReports: https://github.com/LiNk-NY/shinyhubs/issues
 URL: https://github.com/LiNk-NY/shinyhubs
 LazyData: true

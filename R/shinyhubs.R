@@ -48,24 +48,7 @@ shinyhubs <- function(...) {
                         h3(textOutput("hubtitle")),
                         { DT::dataTableOutput('tbl') }
                     ),
-                    tabPanel(title = "About", {
-                    HTML(paste0(
-                      "<b>shinyhubs</b> version: ",
-                      packageVersion("shinyhubs"),
-                      "<br>",
-                      "Last updated: 2022-01-27",
-                      "<br>",
-                      "Source: ",
-                      "<a href='https://github.com/LiNk-NY/shinyhubs' class='fa fa-github'></a>",
-                      "<br>", "<hr>",
-                      "<details style='margin-bottom:10px;'>", "<summary>",
-                      "Session Info",
-                      "</summary>",
-                      "<pre class='r'><code>sessioninfo::session_info()",
-                      verbatimTextOutput("sessioninfo"),
-                      "</code></pre></details>"
-                    ))
-                  })  # end about panel
+                    aboutPanel()
                 )
             )
         ) # end fluidRow
@@ -134,7 +117,10 @@ shinyhubs <- function(...) {
         })
 
         output$sessioninfo <- renderPrint({
-            capture.output(sessioninfo::session_info())
+            if (requireNamespace("sessioninfo", quietly = TRUE))
+                capture.output(sessioninfo::session_info())
+            else
+                capture.output(utils::sessionInfo())
         })
     }
     shinyApp(ui, server, ...)
