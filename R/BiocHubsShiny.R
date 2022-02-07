@@ -118,7 +118,7 @@ BiocHubsShiny <- function(...) {
             shinyAce::aceEditor(
                 outputId = "code",
                 value = .getInit(hub = input$hub),
-                mode = "r"
+                height = "600px", fontSize = 18, mode = "r"
             )
         })
         # data retrieval, massaging
