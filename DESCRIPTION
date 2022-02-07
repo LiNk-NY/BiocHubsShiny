@@ -1,4 +1,4 @@
-Package: shinyhubs
+Package: BiocHubsShiny
 Type: Package
 Title: View AnnotationHub and ExperimentHub Resources Interactively
 Version: 0.99.0
@@ -20,8 +20,8 @@ Imports:
     shinytoastr
 Suggests:
     sessioninfo
-BugReports: https://github.com/LiNk-NY/shinyhubs/issues
-URL: https://github.com/LiNk-NY/shinyhubs
+BugReports: https://github.com/LiNk-NY/BiocHubsShiny/issues
+URL: https://github.com/LiNk-NY/BiocHubsShiny
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2

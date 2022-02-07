@@ -14,7 +14,7 @@
 #'
 #' @import shiny AnnotationHub ExperimentHub
 #' @export
-shinyhubs <- function(...) {
+BiocHubsShiny <- function(...) {
     ui <- fluidPage(
         shinytoastr::useToastr(),
 # https://stackoverflow.com/questions/53616176/shiny-use-validate-inside-downloadhandler
