@@ -21,6 +21,7 @@ Imports:
     shinythemes,
     shinytoastr
 Suggests:
+    BiocManager,
     sessioninfo
 BugReports: https://github.com/LiNk-NY/BiocHubsShiny/issues
 URL: https://github.com/LiNk-NY/BiocHubsShiny

@@ -4,11 +4,18 @@ aboutPanel <- function() {
             "sessioninfo::session_info()"
         else
             "utils::sessionInfo()"
+    bioc_version <-
+        if (!requireNamespace("BiocManager", quietly = TRUE))
+            "version not available"
+        else
+            as.character(BiocManager::version())
+    pkgVer <- as.character(packageVersion("BiocHubsShiny"))
     tabPanel("About",
              HTML(paste0(
                  h4("BiocHubsShiny"),
-                 p("Package version: ", as.character(packageVersion("BiocHubsShiny"))),
-                 p("Last updated: 2022-02-04"),
+                 p("Package version: ", strong(pkgVer)),
+                 p("Bioconductor version: ", strong(bioc_version)),
+                 p("Last updated: ", strong("2022-02-07")),
                  span("Source: ", a(
                      "https://github.com/LiNk-NY/BiocHubsShiny",
                      href="https://github.com/LiNk-NY/BiocHubsShiny"
