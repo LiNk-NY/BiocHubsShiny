@@ -18,6 +18,7 @@ Imports:
     S4Vectors,
     shinyAce,
     shinyjs,
+    shinythemes,
     shinytoastr
 Suggests:
     sessioninfo

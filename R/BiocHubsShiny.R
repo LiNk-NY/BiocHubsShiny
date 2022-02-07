@@ -35,12 +35,20 @@ hub <- ", hub, "()
 #' @export
 BiocHubsShiny <- function(...) {
     ui <- fluidPage(
+        theme = shinythemes::shinytheme("simplex"),
         shinytoastr::useToastr(),
 # https://stackoverflow.com/questions/53616176/shiny-use-validate-inside-downloadhandler
         shinyjs::useShinyjs(),
         fluidRow(
-            column(8, titlePanel(strong("Bioconductor *Hub Resources")),
-            helpText("The online shop for AnnotationHub and ExperimentHub Data")),
+            column(8,
+                titlePanel(
+                    title = strong("Bioconductor *Hub Resources"),
+                    windowTitle = "BiocHubsShiny"
+                ),
+                helpText(
+                    "The online shop for AnnotationHub and ExperimentHub Data"
+                )
+            ),
             column(4, br(),
                 img(
                     src = "images/bioconductor_logo_rgb_small.png",
@@ -79,7 +87,9 @@ BiocHubsShiny <- function(...) {
                         "right of the table to filter records."
                     ),
                     hr(),
-                    actionButton("stopBtn", "Stop BiocHubsShiny")
+                    actionButton(
+                        "stopBtn", "Stop BiocHubsShiny", class = "btn-primary"
+                    )
                 )
             ),
             column(9,
