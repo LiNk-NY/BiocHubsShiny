@@ -1,3 +1,22 @@
+.getInit <- function(hub, hubid = "click_a_row") {
+    paste0(
+        "## Make sure BiocManager is installed
+if (!require('BiocManager', quietly = TRUE))
+    install.packages('BiocManager')
+## Make sure ", hub, " is installed
+if (!require(", dQuote(hub), ", quietly = TRUE))
+    BiocManager::install(", dQuote(hub), ")
+
+## Use this code to download the resource
+library(", dQuote(hub), ")
+hub <- ", hub, "()
+## Select rows in the table
+",
+        paste0(paste0("hub[['", hubid, "']]"), collapse = "\n")
+    )
+}
+
+
 #' Initialize the shiny application for Bioconductor Hub resources
 #'
 #' The shiny app will allow the user to view a table of either `AnnotationHub`
@@ -20,7 +39,7 @@ BiocHubsShiny <- function(...) {
 # https://stackoverflow.com/questions/53616176/shiny-use-validate-inside-downloadhandler
         shinyjs::useShinyjs(),
         fluidRow(
-            column(8, titlePanel("Bioconductor *Hub Resources"),
+            column(8, titlePanel(strong("Bioconductor *Hub Resources")),
             helpText("The online shop for AnnotationHub and ExperimentHub Data")),
             column(4, br(),
                 img(
@@ -33,12 +52,34 @@ BiocHubsShiny <- function(...) {
         fluidRow(
             column(2,
                 wellPanel(
-                    h3("Hub Selection"),
-                    radioButtons(
-                        "hub",
-                        label = "Choose either ExperimentHub or AnnotationHub",
-                        choices = c("AnnotationHub", "ExperimentHub")
-                    )
+                    wellPanel(
+                        radioButtons(
+                            "hub",
+                            label = h4(strong("Select A Bioconductor Hub")),
+                            choices = c("AnnotationHub", "ExperimentHub")
+                        )
+                    ),
+                    wellPanel(
+                        h4(strong("Download")),
+                        br(),
+                        h5("*Hub Resources"),
+                        helpText(
+                            "Select the rows of interest and then run the code",
+                            "found in the Download tab within an R session."
+                        ),
+                        br(),
+                        h5("*Hub Metadata"),
+                        helpText(
+                            "Select rows and click 'Download metadata'."
+                        ),
+                        downloadButton("btnSend", "Download metadata"),
+                    ),
+                    helpText(
+                        strong("Tip"), ": Use the search box at the top",
+                        "right of the table to filter records."
+                    ),
+                    hr(),
+                    actionButton("stopBtn", "Stop BiocHubsShiny")
                 )
             ),
             column(9,
@@ -48,6 +89,13 @@ BiocHubsShiny <- function(...) {
                         h3(textOutput("hubtitle")),
                         { DT::dataTableOutput('tbl') }
                     ),
+                    tabPanel("Download", {
+                        fluidRow(
+                            column(6,
+                                uiOutput("ace_input")
+                            )
+                        )
+                    }),
                     aboutPanel()
                 )
             )
@@ -56,6 +104,13 @@ BiocHubsShiny <- function(...) {
     ## from interactiveDisplayBase:::.dataFrame3
     server <- function(input, output, session) {
 
+        output$ace_input <- renderUI({
+            shinyAce::aceEditor(
+                outputId = "code",
+                value = .getInit(hub = input$hub),
+                mode = "r"
+            )
+        })
         # data retrieval, massaging
         hub_obj <- reactive({
             # let the user know that action is ongoing during loading
@@ -115,6 +170,42 @@ BiocHubsShiny <- function(...) {
                 nrec, nspec
             )
         })
+
+        observeEvent(
+            input$tbl_rows_selected,
+            {
+                idx <- input$tbl_rows_selected
+                ans <- biochub[idx, ]
+                shinyAce::updateAceEditor(
+                    session,
+                    "code",
+                    value = .getInit(hub = input$hub, hubid = ans$HUBID)
+                )
+            }
+        )
+
+        output$btnSend <- downloadHandler(
+            filename = function() {
+                fprefix <- paste0(input$hub, "_meta_sel_")
+                paste0(
+                    fprefix, format(Sys.time(), "%F_%Hh%Mm"), ".Rds"
+                )
+            },
+            content = function(con) {
+                idx <- input$tbl_rows_selected
+                ans <- biochub[idx, ]
+                saveRDS(ans, file=con)
+            },
+            contentType="application/octet-stream"
+        )
+
+        observeEvent(
+            input$stopBtn,
+            {
+                # could return information here
+                stopApp(returnValue=NULL)
+            }
+        )
 
         output$sessioninfo <- renderPrint({
             if (requireNamespace("sessioninfo", quietly = TRUE))
