@@ -1,18 +1,19 @@
-.getInit <- function(hub, hubid = "click_a_row") {
-    paste0(
-        "## Make sure BiocManager is installed
-if (!require('BiocManager', quietly = TRUE))
-    install.packages('BiocManager')
-## Make sure ", hub, " is installed
-if (!require(", dQuote(hub), ", quietly = TRUE))
-    BiocManager::install(", dQuote(hub), ")
-
-## Use this code to download the resource
-library(", dQuote(hub), ")
-hub <- ", hub, "()
-## Select rows in the table
-",
-        paste0(paste0("hub[['", hubid, "']]"), collapse = "\n")
+.shinyAce_template <- function(hub, hubid = "click_a_row") {
+    hubname <- dQuote(hub, FALSE)
+    p0 <- paste0
+    paste(
+        "## Make sure BiocManager is installed",
+        "if (!require('BiocManager', quietly = TRUE))",
+        "    install.packages('BiocManager')\n",
+        p0("## Make sure ", hub, " is installed"),
+        p0("if (!require(", hubname, ", quietly = TRUE))"),
+        p0("    BiocManager::install(", hubname, ")", "\n"),
+        "## Use this code to download the resource",
+        p0("library(", hubname, ")"),
+        p0("hub <- ", hub, "()", "\n"),
+        "## Select rows in the table",
+        p0(p0("hub[['", hubid, "']]"), collapse = "\n"),
+        sep = "\n"
     )
 }
 
@@ -117,7 +118,7 @@ BiocHubsShiny <- function(...) {
         output$ace_input <- renderUI({
             shinyAce::aceEditor(
                 outputId = "code",
-                value = .getInit(hub = input$hub),
+                value = .shinyAce_template(hub = input$hub),
                 height = "600px", fontSize = 18, mode = "r"
             )
         })
@@ -189,7 +190,9 @@ BiocHubsShiny <- function(...) {
                 shinyAce::updateAceEditor(
                     session,
                     "code",
-                    value = .getInit(hub = input$hub, hubid = ans$HUBID)
+                    value = .shinyAce_template(
+                        hub = input$hub, hubid = ans$HUBID
+                    )
                 )
             }
         )
