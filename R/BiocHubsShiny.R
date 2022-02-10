@@ -129,9 +129,9 @@ BiocHubsShiny <- function(...) {
                 "retrieving *Hub data...", timeOut=3000
             )
             if (identical(input$hub, "AnnotationHub")) {
-                hub <<- AnnotationHub::AnnotationHub()
+                hub <- AnnotationHub::AnnotationHub()
             } else if (identical(input$hub, "ExperimentHub")) {
-                hub <<- ExperimentHub::ExperimentHub()
+                hub <- ExperimentHub::ExperimentHub()
             }
             md <- S4Vectors::mcols(hub)
             ans <- as.data.frame(md)
@@ -162,7 +162,7 @@ BiocHubsShiny <- function(...) {
                 on.exit({
                     shinytoastr::toastr_info("done.", timeOut=2500)
                 })
-                biochub <<- hub_obj()
+                hub_obj()
             },
             server = TRUE,
             filter = "top",
@@ -171,6 +171,7 @@ BiocHubsShiny <- function(...) {
 
         # render title text
         output$hubtitle <- renderText({
+            biochub <- hub_obj()
             nrec <- nrow(biochub)
             nspec <- length(unique(biochub[["species"]]))
             sprintf(
@@ -186,6 +187,7 @@ BiocHubsShiny <- function(...) {
             input$tbl_rows_selected,
             {
                 idx <- input$tbl_rows_selected
+                biochub <- hub_obj()
                 ans <- biochub[idx, ]
                 shinyAce::updateAceEditor(
                     session,
@@ -206,6 +208,7 @@ BiocHubsShiny <- function(...) {
             },
             content = function(con) {
                 idx <- input$tbl_rows_selected
+                biochub <- hub_obj()
                 ans <- biochub[idx, ]
                 saveRDS(ans, file=con)
             },
