@@ -10,24 +10,21 @@ aboutPanel <- function() {
         else
             as.character(BiocManager::version())
     pkgVer <- as.character(packageVersion("BiocHubsShiny"))
-    tabPanel("About",
-             HTML(paste0(
-                 h4("BiocHubsShiny"),
-                 p("Package version: ", strong(pkgVer)),
-                 p("Bioconductor version: ", strong(bioc_version)),
-                 p("Last updated: ", strong("2022-02-07")),
-                 span("Source: ", a(
-                     "https://github.com/LiNk-NY/BiocHubsShiny",
-                     href="https://github.com/LiNk-NY/BiocHubsShiny"
-                 )),
-                 hr(),
-                 "<details style='margin-bottom:10px;'>", "<summary>",
-                 "&#9654; Session Info",
-                 "</summary>",
-                 "<pre class='r'><code>", sessionText,
-                 verbatimTextOutput("sessioninfo"),
-                 "</code></pre></details>"
-             )),
-             value="about"
-    )
+    HTML(paste0(
+        h4("BiocHubsShiny"),
+        p("Package version: ", strong(pkgVer)),
+        p("Bioconductor version: ", strong(bioc_version)),
+        p("Last updated: ", strong("2022-02-07")),
+        span("Source: ", a(
+            "https://github.com/LiNk-NY/BiocHubsShiny",
+            href="https://github.com/LiNk-NY/BiocHubsShiny"
+        )),
+        hr(),
+        "<details style='margin-bottom:10px;'>", "<summary>",
+        "&#9654; Session Info",
+        "</summary>",
+        "<pre class='r'><code>", sessionText,
+        verbatimTextOutput("sessioninfo"),
+        "</code></pre></details>"
+    ))
 }

@@ -40,49 +40,42 @@ BiocHubsShiny <- function(...) {
         shinytoastr::useToastr(),
 # https://stackoverflow.com/questions/53616176/shiny-use-validate-inside-downloadhandler
         shinyjs::useShinyjs(),
-        fluidRow(
-            column(8,
-                titlePanel(
-                    title = strong("Bioconductor *Hub Resources"),
-                    windowTitle = "BiocHubsShiny"
-                ),
-                helpText(
-                    "The online shop for AnnotationHub and ExperimentHub Data"
-                )
-            ),
-            column(4, br(),
-                img(
-                    src = "images/bioconductor_logo_rgb_small.png",
-                    align = "right",
-                    style = "margin-right:10px"
-                )
+        titlePanel(
+            windowTitle = "BiocHubsShiny",
+            title = div(
+               img(
+                 src = "images/bioconductor_logo_rgb_small.png",
+                 align = "right",
+                 style = "margin-right:10px"
+               ),
+               strong("Bioconductor *Hub Resources")
             )
         ),
-        fluidRow(
-            column(2,
-                wellPanel(
-                    wellPanel(
-                        radioButtons(
-                            "hub",
-                            label = h4(strong("Select A Bioconductor Hub")),
-                            choices = c("AnnotationHub", "ExperimentHub")
-                        )
+        helpText(
+            "The online shop for AnnotationHub and ExperimentHub Data"
+        ),
+        br(),
+        sidebarLayout(
+            div(class = "sidebar",
+                sidebarPanel(
+                    radioButtons(
+                        "hub",
+                        label = h4(strong("Select A Bioconductor Hub")),
+                        choices = c("AnnotationHub", "ExperimentHub")
                     ),
-                    wellPanel(
-                        h4(strong("Download")),
-                        br(),
-                        h5("*Hub Resources"),
-                        helpText(
-                            "Select the rows of interest and then run the code",
-                            "found in the Download tab within an R session."
-                        ),
-                        br(),
-                        h5("*Hub Metadata"),
-                        helpText(
-                            "Select rows and click 'Download metadata'."
-                        ),
-                        downloadButton("btnSend", "Download metadata"),
+                    h4(strong("Download")),
+                    br(),
+                    h5("*Hub Resources"),
+                    helpText(
+                        "Select the rows of interest and then run the code",
+                        "found in the Download tab within an R session."
                     ),
+                    br(),
+                    h5("*Hub Metadata"),
+                    helpText(
+                        "Select rows and click 'Download metadata'."
+                    ),
+                    downloadButton("btnSend", "Download metadata"),
                     helpText(
                         strong("Tip"), ": Use the search box at the top",
                         "right of the table to filter records."
@@ -90,27 +83,30 @@ BiocHubsShiny <- function(...) {
                     hr(),
                     actionButton(
                         "stopBtn", "Stop BiocHubsShiny", class = "btn-primary"
-                    )
+                    ),
+                    width = 2
                 )
             ),
-            column(9,
-                tabsetPanel(
-                    tabPanel(
-                        title = "Bioconductor Hub",
-                        h3(textOutput("hubtitle")),
-                        { DT::dataTableOutput('tbl') }
-                    ),
-                    tabPanel("Download", {
-                        fluidRow(
-                            column(6,
-                                uiOutput("ace_input")
-                            )
-                        )
-                    }),
-                    aboutPanel()
+            mainPanel(navbarPage(
+                title = tagList(
+                    actionLink("sidebar_button","",icon = icon("bars")), ""
+                ),
+                id = "navbarID",
+                tabPanel(
+                    title = "Bioconductor Hub",
+                    h3(textOutput("hubtitle")),
+                    { DT::dataTableOutput('tbl') }
+                ),
+                tabPanel("Download", {
+                    uiOutput("ace_input")
+                }),
+                tabPanel(
+                    title = "About",
+                    aboutPanel(),
+                    value = "about"
                 )
-            )
-        ) # end fluidRow
+            ), width = 10)
+        )
     ) # end fluidPage
     ## from interactiveDisplayBase:::.dataFrame3
     server <- function(input, output, session) {
@@ -119,7 +115,7 @@ BiocHubsShiny <- function(...) {
             shinyAce::aceEditor(
                 outputId = "code",
                 value = .shinyAce_template(hub = input$hub),
-                height = "600px", fontSize = 18, mode = "r"
+                height = "500px", fontSize = 18, mode = "r"
             )
         })
         # data retrieval, massaging
@@ -222,6 +218,10 @@ BiocHubsShiny <- function(...) {
                 stopApp(returnValue=NULL)
             }
         )
+
+        observeEvent(input$sidebar_button,{
+            shinyjs::toggle(selector = ".sidebar")
+        })
 
         output$sessioninfo <- renderPrint({
             if (requireNamespace("sessioninfo", quietly = TRUE))
