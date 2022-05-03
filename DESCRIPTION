@@ -3,10 +3,10 @@ Type: Package
 Title: View AnnotationHub and ExperimentHub Resources Interactively
 Version: 0.99.4
 Authors@R: c( 
-    person("Marcel", "Ramos", "M.", "marcel.ramosperez@roswellpark.org",
+    person("Marcel", "Ramos", , "marcel.ramosperez@roswellpark.org",
       c("aut", "cre"), c(ORCID = "0000-0002-3242-0582")
     ),
-    person("Vincent", "Carey", "J.", "stvjc@channing.harvard.edu", "ctb")
+    person("Vincent", "Carey", , "stvjc@channing.harvard.edu", "ctb")
   )
 Description: It uses DT or DataTable to display the AnnotationHub and
   ExperimentHub resources.
