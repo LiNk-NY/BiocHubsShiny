@@ -68,7 +68,7 @@ BiocHubsShiny <- function(...) {
                     h5("*Hub Resources"),
                     helpText(
                         "Select the rows of interest and then run the code",
-                        "found in the Download tab within an R session."
+                        "below the table within an R session."
                     ),
                     br(),
                     h5("*Hub Metadata"),
@@ -89,17 +89,19 @@ BiocHubsShiny <- function(...) {
             ),
             mainPanel(navbarPage(
                 title = tagList(
-                    actionLink("sidebar_button","",icon = icon("bars")), ""
+                    actionLink("sidebar_button", "", icon = icon("bars")), ""
                 ),
                 id = "navbarID",
                 tabPanel(
                     title = "Bioconductor Hub",
                     h3(textOutput("hubtitle")),
-                    { DT::dataTableOutput('tbl') }
+                    fluidRow(
+                        DT::dataTableOutput('tbl')
+                    ),
+                    fluidRow(
+                        uiOutput("ace_input")
+                    )
                 ),
-                tabPanel("Download", {
-                    uiOutput("ace_input")
-                }),
                 tabPanel(
                     title = "About",
                     aboutPanel(),
@@ -115,7 +117,7 @@ BiocHubsShiny <- function(...) {
             shinyAce::aceEditor(
                 outputId = "code",
                 value = .shinyAce_template(hub = input$hub),
-                height = "500px", fontSize = 18, mode = "r"
+                height = "380px", fontSize = 18, mode = "r"
             )
         })
         # data retrieval, massaging
@@ -161,8 +163,9 @@ BiocHubsShiny <- function(...) {
                 hub_obj()
             },
             server = TRUE,
+            rownames = FALSE,
             filter = "top",
-            options = list(orderClasses = TRUE)
+            options = list(orderClasses = TRUE, pageLength = 6)
         )
 
         # render title text
