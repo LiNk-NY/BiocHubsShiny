@@ -36,6 +36,13 @@
 #' @export
 BiocHubsShiny <- function(...) {
     ui <- fluidPage(
+        tags$head(
+            tags$style(
+                "#big-heading{color: #F15340; font-weight: bold;}",
+                "#snapshotdate{color: #87B13F; font-size:18px; font-style: italic;}",
+                "#hubtitle{color: #076570; font-size:24px; font-weight: bold;}"
+            )
+        ),
         theme = shinythemes::shinytheme("simplex"),
         shinytoastr::useToastr(),
 # https://stackoverflow.com/questions/53616176/shiny-use-validate-inside-downloadhandler
@@ -43,72 +50,76 @@ BiocHubsShiny <- function(...) {
         titlePanel(
             windowTitle = "BiocHubsShiny",
             title = div(
-               img(
-                 src = "images/bioconductor_logo_rgb_small.png",
-                 align = "right",
-                 style = "margin-right:10px"
-               ),
-               strong("Bioconductor *Hub Resources")
+                img(
+                    src = "images/bioconductor_logo_rgb_small.png",
+                    align = "right",
+                    style = "margin-right:10px"
+                ),
+                h1(id = "big-heading", "Bioconductor *Hub Resources")
             )
         ),
-        helpText(
+        h3(
             "The online shop for AnnotationHub and ExperimentHub Data"
         ),
         br(),
-        sidebarLayout(
-            div(class = "sidebar",
-                sidebarPanel(
-                    radioButtons(
-                        "hub",
-                        label = h4(strong("Select A Bioconductor Hub")),
-                        choices = c("AnnotationHub", "ExperimentHub")
+        navbarPage(
+            title = actionLink("sidebar_button", "", icon = icon("bars")),
+            id = "navbarID",
+            tabPanel(
+                title = h4("Bioconductor Hub"),
+                sidebarLayout(
+                    div(class = "sidebar",
+                        sidebarPanel(
+                            radioButtons(
+                                "hub",
+                                label = h4(strong("Select A Bioconductor Hub")),
+                                choices = c("AnnotationHub", "ExperimentHub")
+                            ),
+                            hr(),
+                            h4(strong("Download")),
+                            h5(strong("*Hub Resources")),
+                            helpText(
+                                "Select the rows of interest and then run the code",
+                                "below the table within an R session."
+                            ),
+                            h5(strong("*Hub Metadata")),
+                            helpText(
+                                "Select rows and click 'Download metadata'."
+                            ),
+                            br(),
+                            downloadButton("btnSend", "Download metadata"),
+                            helpText(
+                                strong("Tip"), ": Use the search box at the top",
+                                "right of the table to filter records."
+                            ),
+                            hr(),
+                            actionButton(
+                                "stopBtn", "Stop BiocHubsShiny", class = "btn-primary"
+                            ),
+                            width = 2
+                        )
                     ),
-                    h4(strong("Download")),
-                    br(),
-                    h5(strong("*Hub Resources")),
-                    helpText(
-                        "Select the rows of interest and then run the code",
-                        "below the table within an R session."
-                    ),
-                    br(),
-                    h5(strong("*Hub Metadata")),
-                    helpText(
-                        "Select rows and click 'Download metadata'."
-                    ),
-                    downloadButton("btnSend", "Download metadata"),
-                    helpText(
-                        strong("Tip"), ": Use the search box at the top",
-                        "right of the table to filter records."
-                    ),
-                    hr(),
-                    actionButton(
-                        "stopBtn", "Stop BiocHubsShiny", class = "btn-primary"
-                    ),
-                    width = 2
+                    mainPanel(
+                        h3(textOutput("hubtitle")),
+                        textOutput("snapshotdate"),
+                        hr(),
+                        fluidRow(
+                            DT::dataTableOutput('tbl')
+                        ),
+                        hr(),
+                        fluidRow(
+                            uiOutput("ace_input")
+                        ),
+                        width = 10
+                    )
                 )
             ),
-            mainPanel(navbarPage(
-                title = tagList(
-                    actionLink("sidebar_button", "", icon = icon("bars")), ""
-                ),
-                id = "navbarID",
-                tabPanel(
-                    title = "Bioconductor Hub",
-                    h3(textOutput("hubtitle")),
-                    fluidRow(
-                        DT::dataTableOutput('tbl')
-                    ),
-                    fluidRow(
-                        uiOutput("ace_input")
-                    )
-                ),
-                tabPanel(
-                    title = "About",
-                    aboutPanel(),
-                    value = "about"
-                )
-            ), width = 10)
-        )
+            tabPanel(
+                title = h4("About"),
+                aboutPanel(),
+                value = "about"
+            )
+        ) # end navbarPage
     ) # end fluidPage
     ## from interactiveDisplayBase:::.dataFrame3
     server <- function(input, output, session) {
@@ -121,16 +132,20 @@ BiocHubsShiny <- function(...) {
             )
         })
         # data retrieval, massaging
-        hub_obj <- reactive({
-            # let the user know that action is ongoing during loading
-            shinytoastr::toastr_info(
-                "retrieving *Hub data...", timeOut=3000
-            )
+        hub_data <- reactive({
             if (identical(input$hub, "AnnotationHub")) {
                 hub <- AnnotationHub::AnnotationHub(ask = FALSE)
             } else if (identical(input$hub, "ExperimentHub")) {
                 hub <- ExperimentHub::ExperimentHub(ask = FALSE)
             }
+            hub
+        })
+        hub_obj <- reactive({
+            shinytoastr::toastr_info(
+                "retrieving *Hub data...", timeOut=3000
+            )
+            # let the user know that action is ongoing during loading
+            hub <- hub_data()
             md <- S4Vectors::mcols(hub)
             ans <- as.data.frame(md)
             ans <- as.data.frame(
@@ -139,9 +154,9 @@ BiocHubsShiny <- function(...) {
             )
 
             ans <- ans[,
-                -which(names(ans) %in%
-                    c("rdataclass", "rdatapath", "sourceurl",
-                      "sourcetype", "preparerclass"))
+                       -which(names(ans) %in%
+                                  c("rdataclass", "rdatapath", "sourceurl",
+                                    "sourcetype", "preparerclass"))
             ]
             ans$tags <- vapply(
                 unname(unclass(md$tags)),
@@ -149,6 +164,10 @@ BiocHubsShiny <- function(...) {
                 character(1), collapse = ", "
             )
             ans
+        })
+        hub_ss <- reactive({
+            hub <- hub_data()
+            AnnotationHub::snapshotDate(hub)
         })
 
         # table rendering
@@ -179,6 +198,13 @@ BiocHubsShiny <- function(...) {
                     "resources from %d distinct species in Bioconductor"
                 ),
                 nrec, nspec
+            )
+        })
+
+        output$snapshotdate <- renderText({
+            sprintf(
+                "Snapshot Date: %s",
+                hub_ss()
             )
         })
 
