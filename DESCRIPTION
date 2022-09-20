@@ -27,4 +27,4 @@ BugReports: https://github.com/LiNk-NY/BiocHubsShiny/issues
 URL: https://github.com/LiNk-NY/BiocHubsShiny
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
