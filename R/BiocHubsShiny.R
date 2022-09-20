@@ -65,13 +65,13 @@ BiocHubsShiny <- function(...) {
                     ),
                     h4(strong("Download")),
                     br(),
-                    h5("*Hub Resources"),
+                    h5(strong("*Hub Resources")),
                     helpText(
                         "Select the rows of interest and then run the code",
                         "below the table within an R session."
                     ),
                     br(),
-                    h5("*Hub Metadata"),
+                    h5(strong("*Hub Metadata")),
                     helpText(
                         "Select rows and click 'Download metadata'."
                     ),
@@ -127,9 +127,9 @@ BiocHubsShiny <- function(...) {
                 "retrieving *Hub data...", timeOut=3000
             )
             if (identical(input$hub, "AnnotationHub")) {
-                hub <- AnnotationHub::AnnotationHub()
+                hub <- AnnotationHub::AnnotationHub(ask = FALSE)
             } else if (identical(input$hub, "ExperimentHub")) {
-                hub <- ExperimentHub::ExperimentHub()
+                hub <- ExperimentHub::ExperimentHub(ask = FALSE)
             }
             md <- S4Vectors::mcols(hub)
             ans <- as.data.frame(md)
