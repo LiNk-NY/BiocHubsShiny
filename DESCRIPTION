@@ -15,6 +15,7 @@ Encoding: UTF-8
 Depends: R (>= 4.1.0), shiny, AnnotationHub, ExperimentHub
 Imports:
     DT,
+    htmlwidgets,
     S4Vectors,
     shinyAce,
     shinyjs,

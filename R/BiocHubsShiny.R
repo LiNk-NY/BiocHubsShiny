@@ -184,7 +184,18 @@ BiocHubsShiny <- function(...) {
             server = TRUE,
             rownames = FALSE,
             filter = "top",
-            options = list(orderClasses = TRUE, pageLength = 6)
+            options = list(
+                orderClasses = TRUE, pageLength = 6,
+                columnDefs = list(list(
+                    targets = c(2, 10),
+                    render = htmlwidgets::JS(
+                        "function(data, type, row) {",
+                        "return type === 'display' && data.length > 10 ?",
+                        "'<span title=\"' + data + '\">' + data.substr(0, 10) + '...</span>' : data;",
+                        "}"
+                    )
+                ))
+            )
         )
 
         # render title text
