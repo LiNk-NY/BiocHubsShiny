@@ -9,7 +9,7 @@ aboutPanel <- function() {
             "version not available"
         else
             as.character(BiocManager::version())
-    pkgVer <- as.character(packageVersion("BiocHubsShiny"))
+    pkgVer <- as.character(utils::packageVersion("BiocHubsShiny"))
     HTML(paste0(
         h4("BiocHubsShiny"),
         p("Package version: ", strong(pkgVer)),

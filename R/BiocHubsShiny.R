@@ -21,12 +21,11 @@
 #' Initialize the shiny application for Bioconductor Hub resources
 #'
 #' The shiny app will allow the user to view a table of either `AnnotationHub`
-#' or `ExperimentHub` resources.
+#' or `ExperimentHub` resources depending on the sidebar selection. It provides
+#' example code for downloading the selected resources.
 #'
 #' @details Note. The code here was adapted from `interactiveDisplayBase` and
-#' `?'display,Hub-method'`.
-#'
-#' @seealso ?`interactiveDisplayBase::display`, ?`display,Hub-method`
+#' `?'display,Hub-method'` which are now deprecated.
 #'
 #' @param ... Further arguments to the `runApp` function
 #'
@@ -39,7 +38,10 @@ BiocHubsShiny <- function(...) {
         tags$head(
             tags$style(
                 "#big-heading{color: #F15340; font-weight: bold;}",
-                "#snapshotdate{color: #87B13F; font-size:18px; font-style: italic;}",
+                paste0(
+                    "#snapshotdate{color: #87B13F; font-size:18px; ",
+                    "font-style: italic;}"
+                ),
                 "#hubtitle{color: #076570; font-size:24px; font-weight: bold;}"
             )
         ),
@@ -79,8 +81,8 @@ BiocHubsShiny <- function(...) {
                             h4(strong("Download")),
                             h5(strong("*Hub Resources")),
                             helpText(
-                                "Select the rows of interest and then run the code",
-                                "below the table within an R session."
+                                "Select the rows of interest and then run the",
+                                "code below the table within an R session."
                             ),
                             h5(strong("*Hub Metadata")),
                             helpText(
@@ -89,12 +91,14 @@ BiocHubsShiny <- function(...) {
                             br(),
                             downloadButton("btnSend", "Download metadata"),
                             helpText(
-                                strong("Tip"), ": Use the search box at the top",
+                                strong("Tip"),
+                                ": Use the search box at the top",
                                 "right of the table to filter records."
                             ),
                             hr(),
                             actionButton(
-                                "stopBtn", "Stop BiocHubsShiny", class = "btn-primary"
+                                "stopBtn", "Stop BiocHubsShiny",
+                                class = "btn-primary"
                             ),
                             width = 2
                         )
@@ -191,7 +195,8 @@ BiocHubsShiny <- function(...) {
                     render = htmlwidgets::JS(
                         "function(data, type, row) {",
                         "return type === 'display' && data.length > 10 ?",
-                        "'<span title=\"' + data + '\">' + data.substr(0, 10) + '...</span>' : data;",
+                        paste0("'<span title=\"' + data + '\">' + ",
+                        "data.substr(0, 10) + '...</span>' : data;"),
                         "}"
                     )
                 ))
@@ -265,9 +270,9 @@ BiocHubsShiny <- function(...) {
 
         output$sessioninfo <- renderPrint({
             if (requireNamespace("sessioninfo", quietly = TRUE))
-                capture.output(sessioninfo::session_info())
+                utils::capture.output(sessioninfo::session_info())
             else
-                capture.output(utils::sessionInfo())
+                utils::capture.output(utils::sessionInfo())
         })
     }
     shinyApp(ui, server, ...)
