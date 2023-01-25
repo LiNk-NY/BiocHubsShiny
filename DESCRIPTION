@@ -12,20 +12,22 @@ Description: It uses DT or DataTable to display the AnnotationHub and
   ExperimentHub resources.
 License: Artistic-2.0
 Encoding: UTF-8
-Depends: R (>= 4.1.0), shiny, AnnotationHub, ExperimentHub
+Depends: R (>= 4.1.0), shiny
 Imports:
+    AnnotationHub,
+    ExperimentHub,
     DT,
     htmlwidgets,
     S4Vectors,
     shinyAce,
     shinyjs,
     shinythemes,
-    shinytoastr
+    shinytoastr,
+    utils
 Suggests:
     BiocManager,
     sessioninfo
 BugReports: https://github.com/LiNk-NY/BiocHubsShiny/issues
 URL: https://github.com/LiNk-NY/BiocHubsShiny
-LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
