@@ -8,11 +8,13 @@ Authors@R: c(
     ),
     person("Vincent", "Carey", , "stvjc@channing.harvard.edu", "ctb")
   )
-Description: It uses DT or DataTable to display the AnnotationHub and
-  ExperimentHub resources.
+Description: A package that allows interactive exploration of AnnotationHub and
+  ExperimentHub resources. It uses DT / DataTable to display resources for
+  multiple organisms. It provides template code for reproducibility and for
+  downloading resources via the indicated Hub package.
 License: Artistic-2.0
 Encoding: UTF-8
-Depends: R (>= 4.1.0), shiny
+Depends: R (>= 4.3.0), shiny
 Imports:
     AnnotationHub,
     ExperimentHub,
@@ -26,8 +28,13 @@ Imports:
     utils
 Suggests:
     BiocManager,
+    knitr,
+    rmarkdown,
     sessioninfo
+biocViews:
+    Software, ShinyApps
 BugReports: https://github.com/LiNk-NY/BiocHubsShiny/issues
 URL: https://github.com/LiNk-NY/BiocHubsShiny
+VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
