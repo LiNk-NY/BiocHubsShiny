@@ -45,6 +45,7 @@
 #' }
 #' @export
 BiocHubsShiny <- function(...) {
+
     ui <- fluidPage(
         tags$head(
             tags$style(
@@ -137,6 +138,7 @@ BiocHubsShiny <- function(...) {
             )
         ) # end navbarPage
     ) # end fluidPage
+
     ## from interactiveDisplayBase:::.dataFrame3
     server <- function(input, output, session) {
 
@@ -286,5 +288,6 @@ BiocHubsShiny <- function(...) {
                 utils::capture.output(utils::sessionInfo())
         })
     }
+
     shinyApp(ui, server, ...)
 }
