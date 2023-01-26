@@ -33,8 +33,8 @@ Suggests:
     sessioninfo
 biocViews:
     Software, ShinyApps
-BugReports: https://github.com/LiNk-NY/BiocHubsShiny/issues
-URL: https://github.com/LiNk-NY/BiocHubsShiny
+BugReports: https://github.com/Bioconductor/BiocHubsShiny/issues
+URL: https://github.com/Bioconductor/BiocHubsShiny
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
