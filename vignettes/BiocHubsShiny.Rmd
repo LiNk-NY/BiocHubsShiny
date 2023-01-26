@@ -2,9 +2,14 @@
 title: "BiocHubsShiny: Interactive Display of Hub Resources"
 author:
 - name: Marcel Ramos
-  affiliation: Roswell Park Comprehensive Cancer Center, Buffalo, NY USA
-- name: Vince Carey
-  affiliation: Channing Lab, Brigham and Womens Hospital, Harvard University, Boston, MA USA
+  affiliation: [
+    "Roswell Park Comprehensive Cancer Center, Buffalo, NY USA",
+    "CUNY Graduate School of Public Health and Health Policy, New York, NY USA"
+  ]
+- name: Vincent J. Carey
+  affiliation: > 
+    Channing Lab, Brigham and Womens Hospital,
+    Harvard University, Boston, MA USA
 package: BiocHubsShiny
 output:
   BiocStyle::html_document:

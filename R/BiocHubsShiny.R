@@ -20,9 +20,12 @@
 
 #' Initialize the shiny application for Bioconductor Hub resources
 #'
-#' The shiny app will allow the user to view a table of either `AnnotationHub`
-#' or `ExperimentHub` resources depending on the sidebar selection. It provides
-#' example code for downloading the selected resources.
+#' @description \preformatted{
+#' The shiny app will allow the user to view a table of either
+#' \code{AnnotationHub} or \code{ExperimentHub} resources depending on the
+#' sidebar selection. It provides example code for downloading the selected
+#' resources.
+#' }
 #'
 #' @details Note. The code here was adapted from `interactiveDisplayBase` and
 #' `?'display,Hub-method'` which are now deprecated.
@@ -31,7 +34,15 @@
 #'
 #' @md
 #'
+#' @return Mainly called for the side effect of displaying the shiny app in a
+#'   browser
+#'
 #' @import shiny AnnotationHub ExperimentHub
+#'
+#' @examples
+#' if (interactive()) {
+#' BiocHubsShiny()
+#' }
 #' @export
 BiocHubsShiny <- function(...) {
     ui <- fluidPage(
@@ -47,7 +58,8 @@ BiocHubsShiny <- function(...) {
         ),
         theme = shinythemes::shinytheme("simplex"),
         shinytoastr::useToastr(),
-# https://stackoverflow.com/questions/53616176/shiny-use-validate-inside-downloadhandler
+        # https://stackoverflow.com/questions/53616176/
+        # shiny-use-validate-inside-downloadhandler
         shinyjs::useShinyjs(),
         titlePanel(
             windowTitle = "BiocHubsShiny",
@@ -145,10 +157,10 @@ BiocHubsShiny <- function(...) {
             hub
         })
         hub_obj <- reactive({
+            # let the user know that action is ongoing during loading
             shinytoastr::toastr_info(
                 "retrieving *Hub data...", timeOut=3000
             )
-            # let the user know that action is ongoing during loading
             hub <- hub_data()
             md <- S4Vectors::mcols(hub)
             ans <- as.data.frame(md)
@@ -156,12 +168,11 @@ BiocHubsShiny <- function(...) {
                 append(as.list(ans), list(HUBID = rownames(ans)), 0L),
                 row.names = NULL
             )
-
-            ans <- ans[,
-                       -which(names(ans) %in%
-                                  c("rdataclass", "rdatapath", "sourceurl",
-                                    "sourcetype", "preparerclass"))
-            ]
+            col_names <- c(
+                "rdataclass", "rdatapath", "sourceurl",
+                "sourcetype", "preparerclass"
+            )
+            ans <- ans[, -which(names(ans) %in% col_names)]
             ans$tags <- vapply(
                 unname(unclass(md$tags)),
                 base::paste,
