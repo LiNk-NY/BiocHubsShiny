@@ -5,10 +5,10 @@ aboutPanel <- function() {
         else
             "utils::sessionInfo()"
     bioc_version <-
-        if (!requireNamespace("BiocManager", quietly = TRUE))
-            "version not available"
-        else
+        if (requireNamespace("BiocManager", quietly = TRUE))
             as.character(BiocManager::version())
+        else
+            "version not available"
     pkgVer <- as.character(utils::packageVersion("BiocHubsShiny"))
     HTML(paste0(
         h4("BiocHubsShiny"),
