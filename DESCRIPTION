@@ -30,7 +30,8 @@ Suggests:
     BiocManager,
     knitr,
     rmarkdown,
-    sessioninfo
+    sessioninfo,
+    shinytest2
 biocViews:
     Software, ShinyApps
 BugReports: https://github.com/Bioconductor/BiocHubsShiny/issues
