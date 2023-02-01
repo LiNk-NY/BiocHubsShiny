@@ -2,7 +2,9 @@ library(shinytest2)
 ## shinytest2::record_test()
 
 test_that("{shinytest2} recording: BiocHubsShiny-EH", {
+    shiny_app <- BiocHubsShiny::BiocHubsShiny()
     app <- AppDriver$new(
+        shiny_app,
         variant = platform_variant(),
         name = "BiocHubsShiny-EH",
         height = 1303,
@@ -13,7 +15,9 @@ test_that("{shinytest2} recording: BiocHubsShiny-EH", {
 })
 
 test_that("{shinytest2} recording: BiocHubsShiny-about", {
+    shiny_app <- BiocHubsShiny::BiocHubsShiny()
     app <- AppDriver$new(
+        shiny_app,
         variant = platform_variant(),
         name = "BiocHubsShiny-about",
         height = 1256, width = 2259
@@ -23,7 +27,9 @@ test_that("{shinytest2} recording: BiocHubsShiny-about", {
 })
 
 test_that("{shinytest2} recording: BiocHubsShiny-selection", {
+    shiny_app <- BiocHubsShiny::BiocHubsShiny()
     app <- AppDriver$new(
+        shiny_app,
         variant = platform_variant(),
         name = "BiocHubsShiny-selection",
         height = 1256, width = 2259
