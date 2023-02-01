@@ -19,12 +19,11 @@
 
 #' Initialize the shiny application for Bioconductor Hub resources
 #'
-#' @description \preformatted{
+#' @description
 #' The shiny app will allow the user to view a table of either
-#' \code{AnnotationHub} or \code{ExperimentHub} resources depending on the
+#' [AnnotationHub] or [ExperimentHub] resources depending on the
 #' sidebar selection. It provides example code for downloading the selected
 #' resources.
-#' }
 #'
 #' @details Note. The code here was adapted from `interactiveDisplayBase` and
 #' `?'display,Hub-method'` which are now deprecated.

@@ -14,12 +14,10 @@ Mainly called for the side effect of displaying the shiny app in a
 browser
 }
 \description{
-\preformatted{
 The shiny app will allow the user to view a table of either
-\code{AnnotationHub} or \code{ExperimentHub} resources depending on the
+\link{AnnotationHub} or \link{ExperimentHub} resources depending on the
 sidebar selection. It provides example code for downloading the selected
 resources.
-}
 }
 \details{
 Note. The code here was adapted from \code{interactiveDisplayBase} and
