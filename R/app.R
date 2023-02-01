@@ -17,7 +17,6 @@
     )
 }
 
-
 #' Initialize the shiny application for Bioconductor Hub resources
 #'
 #' @description \preformatted{
@@ -41,7 +40,7 @@
 #'
 #' @examples
 #' if (interactive()) {
-#' BiocHubsShiny()
+#'     BiocHubsShiny()
 #' }
 #' @export
 BiocHubsShiny <- function(...) {
