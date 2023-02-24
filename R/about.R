@@ -16,8 +16,8 @@ aboutPanel <- function() {
         p("Bioconductor version: ", strong(bioc_version)),
         p("Last updated: ", strong("2022-02-07")),
         span("Source: ", a(
-            "https://github.com/LiNk-NY/BiocHubsShiny",
-            href="https://github.com/LiNk-NY/BiocHubsShiny"
+            "https://github.com/Bioconductor/BiocHubsShiny",
+            href="https://github.com/Bioconductor/BiocHubsShiny"
         )),
         hr(),
         "<details style='margin-bottom:10px;'>", "<summary>",
