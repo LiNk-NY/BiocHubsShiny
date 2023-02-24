@@ -97,10 +97,24 @@ BiocHubsShiny <- function(...) {
                             ),
                             h5(strong("*Hub Metadata")),
                             helpText(
-                                "Select rows and click 'Download metadata'."
+                                "Select rows and click 'Download metadata'"
+                            ),
+                            downloadButton(
+                                "btnDown", "Download metadata"
                             ),
                             br(),
-                            downloadButton("btnSend", "Download metadata"),
+                            helpText(
+                                "Click 'Send metadata' to interactively add ",
+                                "selected rows to the current R session.",
+                                "If viewing the app on a webpage, use the ",
+                                "'Download metadata' button instead to obtain",
+                                "an Rds of the selections."
+                            ),
+                            actionButton(
+                                "btnSend", "Send metadata",
+                                class = "btn-link"
+                            ),
+                            br(),
                             helpText(
                                 strong("Tip"),
                                 ": Use the search box at the top",
@@ -251,7 +265,27 @@ BiocHubsShiny <- function(...) {
             }
         )
 
-        output$btnSend <- downloadHandler(
+        observeEvent(
+            input$btnSend,
+            {
+                idx <- input$tbl_rows_selected
+                biochub <- hub_obj()
+                value <- biochub[idx, ]
+                oname <- paste0(substr(tolower(input$hub), 1, 1), "h_meta")
+                if (exists(oname))
+                    warning("Overwriting existing '", oname, "'")
+                message("Setting '", oname, "' in .GlobalEnv")
+                cat(
+                    "To save as Rds, run:\n",
+                    "  saveRDS(", oname, ", file = '", oname, ".Rds')\n",
+                    sep = ""
+                )
+                if (!identical(unname(Sys.info()["nodename"]), "shiny"))
+                    assign(oname, value, envir = .GlobalEnv)
+            }
+        )
+
+        output$btnDown <- downloadHandler(
             filename = function() {
                 fprefix <- paste0(input$hub, "_meta_sel_")
                 paste0(
