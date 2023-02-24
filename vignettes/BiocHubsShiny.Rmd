@@ -33,7 +33,7 @@ fields.
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
-BiocManager::install("Bioconductor/BiocHubsShiny")
+BiocManager::install("BiocHubsShiny")
 ```
 
 # Loading the package
@@ -59,7 +59,7 @@ knitr::include_graphics("figures/BiocHubsShiny.png")
 You can filter by any of the columns in the table. For example, you can search
 for 'Mus musculus' to get resources only for that species:
 
-```{r}
+```{r,echo=FALSE}
 knitr::include_graphics("figures/MusMusculus.png")
 ```
 
@@ -68,7 +68,7 @@ knitr::include_graphics("figures/MusMusculus.png")
 Click on the rows to select the resources. They will show up as highlighted
 rows.
 
-```{r}
+```{r,echo=FALSE}
 knitr::include_graphics("figures/MusMusculusSelection.png")
 ```
 
@@ -78,7 +78,7 @@ Once the selection is highlighted, the code at the bottom of the app
 will be updated to show the commands for entering (reproducibly) into
 the R session. 
 
-```{r}
+```{r,echo=FALSE}
 knitr::include_graphics("figures/MusMusculusCode.png")
 ```
 
