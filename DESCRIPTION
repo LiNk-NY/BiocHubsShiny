@@ -28,6 +28,7 @@ Imports:
     utils
 Suggests:
     BiocManager,
+    BiocStyle,
     knitr,
     rmarkdown,
     sessioninfo,
