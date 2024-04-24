@@ -1,3 +1,7 @@
+# Changes in version 1.4.0
+
+* No significant changes.
+
 # Changes in version 1.2.0
 
 ## Bug fixes and minor improvements
