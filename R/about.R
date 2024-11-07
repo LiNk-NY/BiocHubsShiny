@@ -1,3 +1,5 @@
+.PACKAGE_NAME <- "BiocHubsShiny"
+
 aboutPanel <- function() {
     sessionText <-
         if (requireNamespace("sessioninfo", quietly = TRUE))
@@ -9,15 +11,17 @@ aboutPanel <- function() {
             as.character(BiocManager::version())
         else
             "version not available"
-    pkgVer <- as.character(utils::packageVersion("BiocHubsShiny"))
+    pkgVer <- as.character(utils::packageVersion(.PACKAGE_NAME))
     HTML(paste0(
-        h4("BiocHubsShiny"),
+        h4(.PACKAGE_NAME),
         p("Package version: ", strong(pkgVer)),
         p("Bioconductor version: ", strong(bioc_version)),
         p("Last updated: ", strong("2022-02-07")),
         span("Source: ", a(
-            "https://github.com/Bioconductor/BiocHubsShiny",
-            href="https://github.com/Bioconductor/BiocHubsShiny"
+            paste0("https://github.com/Bioconductor/", .PACKAGE_NAME),
+            href=paste0(
+                "https://github.com/Bioconductor/", .PACKAGE_NAME
+            )
         )),
         hr(),
         "<details style='margin-bottom:10px;'>", "<summary>",
