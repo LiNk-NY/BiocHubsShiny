@@ -20,6 +20,7 @@ Imports:
     ExperimentHub,
     DT,
     htmlwidgets,
+    rclipboard,
     S4Vectors,
     shinyAce,
     shinyjs,

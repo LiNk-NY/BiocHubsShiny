@@ -60,6 +60,7 @@ BiocHubsShiny <- function(...) {
         # https://stackoverflow.com/questions/53616176/
         # shiny-use-validate-inside-downloadhandler
         shinyjs::useShinyjs(),
+        rclipboard::rclipboardSetup(),
         titlePanel(
             windowTitle = "BiocHubsShiny",
             title = div(
@@ -137,7 +138,11 @@ BiocHubsShiny <- function(...) {
                         ),
                         hr(),
                         fluidRow(
-                            uiOutput("ace_input")
+                            div(
+                                style = "position: relative;",
+                                uiOutput("clipButton"),
+                                uiOutput("ace_input")
+                            )
                         ),
                         width = 10
                     )
@@ -285,6 +290,17 @@ BiocHubsShiny <- function(...) {
             }
         )
 
+
+        output$clipButton <- renderUI({
+            rclipboard::rclipButton(
+                inputId = "copyBtn",
+                label = NULL,
+                icon = icon("clipboard"),
+                clipText = input$code,
+                class = "btn",
+                style = "position: absolute; top: 20px; right: 20px; z-index: 100;"
+            )
+        })
         output$btnDown <- downloadHandler(
             filename = function() {
                 fprefix <- paste0(input$hub, "_meta_sel_")
