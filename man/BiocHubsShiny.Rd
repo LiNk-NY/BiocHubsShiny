@@ -15,9 +15,10 @@ browser
 }
 \description{
 The shiny app will allow the user to view a table of either
-\link{AnnotationHub} or \link{ExperimentHub} resources depending on the
-sidebar selection. It provides example code for downloading the selected
-resources.
+\link[AnnotationHub:AnnotationHub-class]{AnnotationHub} or
+\link[ExperimentHub:ExperimentHub-class]{ExperimentHub} resources depending on
+the sidebar selection. It provides example code for downloading the
+selected resources.
 }
 \details{
 Note. The code here was adapted from \code{interactiveDisplayBase} and
