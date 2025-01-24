@@ -112,7 +112,7 @@ BiocHubsShiny <- function(...) {
                                 "selected rows to the current R session.",
                                 "If viewing the app on a webpage, use the ",
                                 "'Download metadata' button instead to obtain",
-                                "an Rds of the selections."
+                                "a text file of the selections."
                             ),
                             actionButton(
                                 "btnSend", "Send metadata",
