@@ -280,8 +280,8 @@ BiocHubsShiny <- function(...) {
                     warning("Overwriting existing '", oname, "'")
                 message("Setting '", oname, "' in .GlobalEnv")
                 cat(
-                    "To save as Rds, run:\n",
-                    "  saveRDS(", oname, ", file = '", oname, ".Rds')\n",
+                    "To save as text file, run:\n",
+                    "  write.table(", oname, ", file = '", oname, ".txt')\n",
                     sep = ""
                 )
                 if (!identical(unname(Sys.info()["nodename"]), "shiny"))
@@ -293,14 +293,14 @@ BiocHubsShiny <- function(...) {
             filename = function() {
                 fprefix <- paste0(input$hub, "_meta_sel_")
                 paste0(
-                    fprefix, format(Sys.time(), "%F_%Hh%Mm"), ".Rds"
+                    fprefix, format(Sys.time(), "%F_%Hh%Mm"), ".txt"
                 )
             },
             content = function(con) {
                 idx <- input$tbl_rows_selected
                 biochub <- hub_obj()
                 ans <- biochub[idx, ]
-                saveRDS(ans, file=con)
+                write.table(ans, file=con, row.names = FALSE)
             },
             contentType="application/octet-stream"
         )
